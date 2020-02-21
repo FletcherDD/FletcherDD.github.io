@@ -34,6 +34,8 @@ physdiskwrite.exe -u xxxxxx.img
 
 ## 基本配置
 
+### 网络配置与安装语言包
+
 - 使用官方安装包安装的OpenWrt默认域名为openwrt.lan默认IP为192.168.1.1默认开启ssh用户为root无密码，使用以下命令查看wan和lan的配置网口
 ```
 cat /etc/config/network
@@ -52,6 +54,7 @@ opkg install luci-i18n-base-zh-cn
 ### 系统空间扩容
 
 - 系统初始空间仅256M，如果安装的硬盘空间足够大，则仍有大量空闲空间未使用，而一般分区工具可能无法对此系统空间扩容，官方使用OverlayFS来实现扩展软件安装空间，使用时最好了解OverlayFS的特性再决定是否使用此方式来扩容
+- [官方文档](https://openwrt.org/docs/guide-user/additional-software/extroot_configuration)
 - 安装必要的软件：
 ```
 opkg update
@@ -90,7 +93,19 @@ reboot
 
 ![扩容后](/assets/img/mount_after.png)
 
-### 上网配置
-- 将电脑网口与软路由lan口连接，浏览器打开http://openwrt.lan/，
+### 网络配置
+
+#### 管理密码
+
+- 将电脑网口与软路由lan口连接，浏览器打开http://openwrt.lan ，无需密码直接登录。[LuCI](http://openwrt.lan) → 系统 → 管理权，修改软路由登录密码
+
+#### 多LAN口配置
+
+- [LuCI](http://openwrt.lan) → 网络 → 接口，点击编辑LAN → 物理设置 → 接口，选择需要设置为LAN口的网络接口 → 保存 → 保存并应用
+
+#### 拨号上网
+
+- 默认设置桥接上级路由，如果需要用此软路由来拨号上网则需要设置
+- [LuCI](http://openwrt.lan) → 网络 → 接口，点击编辑WAN → 基本设置 → 协议PPPOE → 切换协议 → 输入用户名密码 → 保存 → 保存并应用
 
 
