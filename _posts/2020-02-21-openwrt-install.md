@@ -8,5 +8,8 @@ tags: OpenWrt 软路由 安装
 ---
 
 ## 准备
-[源码 →](https://github.com/v2ray/v2ray-core)
-
+官网：[https://openwrt.org](https://openwrt.org)
+设备：x86主机
+工具：U盘
+微PE工具箱：[http://www.wepe.com.cn](http://www.wepe.com.cn)
+写盘工具：[https://m0n0.ch/wall/physdiskwrite.php](https://m0n0.ch/wall/physdiskwrite.php)
