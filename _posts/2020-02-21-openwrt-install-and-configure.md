@@ -36,7 +36,12 @@ physdiskwrite.exe -u xxxxxx.img
 
 ### 网络配置与安装语言包
 
-- 使用官方安装包安装的OpenWrt默认域名为openwrt.lan默认IP为192.168.1.1默认开启ssh用户为root无密码，使用以下命令查看wan和lan的配置网口
+- 使用官方安装包安装的OpenWrt默认配置：
+  - 域名：openwrt.lan
+  - IP：192.168.1.1
+  - 用户：root
+  - 密码：（无）
+- 使用以下命令查看wan和lan的配置网口
 ```
 cat /etc/config/network
 ```
