@@ -19,14 +19,14 @@ tags: OpenWrt 软路由 安装
 
 ### 制作安装工具
 
-- 使用U盘制作微PE启动盘
+- 使用U盘制作微PE启动盘（略）
 - 下载写盘工具(physdiskwrite)和OpenWrt安装文件，OpenWrt安装文件根据自己的软路由配置下载合适的版本，以64位x86主机为例，一般下载combined-ext4/combined-squashfs的版本，例如[https://downloads.openwrt.org/releases/19.07.1/targets/x86/64/openwrt-19.07.1-x86-64-combined-ext4.img.gz](https://downloads.openwrt.org/releases/19.07.1/targets/x86/64/openwrt-19.07.1-x86-64-combined-ext4.img.gz)
 - 将下载的写盘工具(physdiskwrite)和OpenWrt安装文件存放到制作好的微PE工具箱中，下载的OpenWrt安装文件为压缩文件需先解压为.img镜像文件
 
 ### 开始安装
 
 - U盘插入软路由，开机启动后按F11进入BIOS，选择从U盘启动进入PE，不同主板进入的按键不同，大部分从F1-F12尝试即可
-- 进入保存有写盘工具和OpenWrt安装文件的目录，右键选择进入控制台，输入如下命令，xxxxxx.img替换为你的OpenWrt安装文件，选择需要安装到的硬盘(0or1)再输入y确认
+- 进入保存有写盘工具和OpenWrt安装文件的目录，右键选择进入控制台，输入如下命令，xxxxxx.img替换为你的OpenWrt安装文件，选择需要安装到的硬盘(0 or 1)再输入y回车确认
 ```
 physdiskwrite.exe -u xxxxxx.img
 ```
@@ -61,7 +61,7 @@ opkg update
 opkg install fdisk
 opkg install block-mount
 ```
-- 使用fdisk磁盘
+- 使用fdisk查看磁盘
 ```
 fdisk -l
 ```
@@ -97,15 +97,15 @@ reboot
 
 #### 管理密码
 
-- 将电脑网口与软路由lan口连接，浏览器打开http://openwrt.lan ，无需密码直接登录。[LuCI](http://openwrt.lan) → 系统 → 管理权，修改软路由登录密码
+- 将个人电脑网口与软路由lan口连接，电脑浏览器打开http://openwrt.lan ，无需密码直接登录。[LuCI](http://openwrt.lan) → 系统 → 管理权，修改软路由登录密码
 
 #### 多LAN口配置
 
-- [LuCI](http://openwrt.lan) → 网络 → 接口，点击编辑LAN → 物理设置 → 接口，选择需要设置为LAN口的网络接口 → 保存 → 保存并应用
+- [LuCI](http://openwrt.lan) → 网络 → 接口，点击编辑LAN → 物理设置 → 接口，勾选其他需要设置为LAN口的网络接口 → 保存 → 保存并应用
 
 #### 拨号上网
 
-- 默认设置桥接上级路由，如果需要用此软路由来拨号上网则需要设置
+- 默认设置桥接上级路由，如果需要用此软路由来拨号上网则需要修改设置
 - [LuCI](http://openwrt.lan) → 网络 → 接口，点击编辑WAN → 基本设置 → 协议PPPOE → 切换协议 → 输入用户名密码 → 保存 → 保存并应用
 
 
