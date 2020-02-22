@@ -23,7 +23,7 @@ tags: OpenWrt 软路由 安装
 - 下载写盘工具(physdiskwrite)和OpenWrt安装文件，OpenWrt安装文件根据自己的软路由配置下载合适的版本，以64位x86主机为例，一般下载combined-ext4/combined-squashfs的版本，例如[https://downloads.openwrt.org/releases/19.07.1/targets/x86/64/openwrt-19.07.1-x86-64-combined-ext4.img.gz](https://downloads.openwrt.org/releases/19.07.1/targets/x86/64/openwrt-19.07.1-x86-64-combined-ext4.img.gz)
 - 将下载的写盘工具(physdiskwrite)和OpenWrt安装文件存放到制作好的微PE工具箱中，下载的OpenWrt安装文件为压缩文件需先解压为.img镜像文件
 
-### 开始安装
+### 系统安装
 
 - U盘插入软路由，开机启动后按F11进入BIOS，选择从U盘启动进入PE，不同主板进入的按键不同，大部分从F1-F12尝试即可
 - 进入保存有写盘工具和OpenWrt安装文件的目录，右键选择进入控制台，输入如下命令，xxxxxx.img替换为你的OpenWrt安装文件，选择需要安装到的硬盘(0 or 1)再输入y回车确认
@@ -34,18 +34,31 @@ physdiskwrite.exe -u xxxxxx.img
 
 ## 基本配置
 
-### 网络配置与安装语言包
+### 系统管理
 
-- 官方安装包的OpenWrt默认配置：
+#### 进入管理系统
+
+- 官方编译的OpenWrt系统默认配置：
   - 域名：openwrt.lan
   - IP：192.168.1.1
   - 用户：root
   - 密码：（无）
+- [LuCI](http://openwrt.lan)是OpenWrt的WEB端管理系统
+  - 将个人电脑网口与软路由lan口连接，电脑浏览器打开[http://openwrt.lan](http://openwrt.lan) ，初次使用无需密码直接登录
+  - [LuCI](http://openwrt.lan) → 系统 → 管理权，修改软路由登录密码
+- 使用ssh登录OpenWrt进行管理配置
+  - 地址：openwrt.lan (或者使用lan的IP地址)
+  - 端口：22
+  - 用户名：root
+  - 密码：与[LuCI](http://openwrt.lan)登录密码一致，未修改设置密码时初次使用无需密码
+  
+#### 修改基本配置
+
 - 以下命令查看wan和lan网口配置
 ```
 cat /etc/config/network
 ```
-- 若上层路由器IP已经是192.168.1.1则需要修改lan的IP
+- 若上级路由器IP已经是192.168.1.1则需要修改lan的IP地址
 ```
 vim /etc/config/network
 ```
@@ -57,16 +70,6 @@ opkg install luci-i18n-base-zh-cn
 ```
 
 ### 网络配置
-
-#### 系统管理
-
-- [LuCI](http://openwrt.lan)是OpenWrt的WEB端管理系统
-  - 将个人电脑网口与软路由lan口连接，电脑浏览器打开http://openwrt.lan ，初次使用无需密码直接登录。[LuCI](http://openwrt.lan) → 系统 → 管理权，修改软路由登录密码
-- 也可使用ssh登录OpenWrt进行管理配置
-  - 地址：openwrt.lan (或者使用lan的IP地址)
-  - 端口：22
-  - 用户名：root
-  - 密码：与[LuCI](http://openwrt.lan)登录密码一致，未修改设置密码时初次使用无需密码
 
 #### 多LAN口配置
 
