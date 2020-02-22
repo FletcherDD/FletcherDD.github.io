@@ -174,26 +174,66 @@ Configuration OK.
 
 ## 启动服务
 
+### 运行V2Ray
+
+- 目前运行此V2Ray安装脚本后，并没有给OpenWrt系统添加V2Ray的启动服务，自己手动写启动脚本也是一种方法
+- 我们也可以在控制台运行V2Ray
 ```
 $ /usr/bin/v2ray/v2ray -config=/etc/v2ray/config.json
 ```
-此命令为前台运行，我们需要将其转为后台运行，可以使用nohup/setsid/&或者screen等方法，这里以nohup为例
-安装nohup模块
+- 此命令为前台运行，我们需要将其转为后台运行，可以使用nohup/setsid/&或者screen等方法
+
+### nohup后台启动
+
+- 安装nohup模块
 ```
 opkg update
 opkg install coreutils-nohup
 ```
-运行脚本
+- 运行脚本
 ```
 $ nohup /usr/bin/v2ray/v2ray -config=/etc/v2ray/config.json > /dev/null 2>&1 &
 ```
-设置开机启动，将上述命令写入/etc/rc.local即可
+- 查看V2Ray进程
+```
+$ ps |grep v2ray
+16263 root      117m S    /usr/bin/v2ray/v2ray -config=/etc/v2ray/config.json
+16865 root      1080 S    grep v2ray
+```
+
+### 开机启动
+
+- 设置开机启动，将上述命令写入/etc/rc.local即可
 ```
 $ vim /etc/rc.local 
 
 nohup /usr/bin/v2ray/v2ray -config=/etc/v2ray/config.json > /dev/null 2>&1 &
 exit 0
 ```
+
+### 代理测试
+
+```
+$ curl -x socks5://127.0.0.1:10808 google.com
+
+<HTML><HEAD><meta http-equiv="content-type" content="text/html;charset=utf-8">
+<TITLE>301 Moved</TITLE></HEAD><BODY>
+<H1>301 Moved</H1>
+The document has moved
+<A HREF="http://www.google.com/">here</A>.
+</BODY></HTML>
+```
+```
+$ curl -x http://your-http-proxy-username:your-http-proxy-password@127.0.0.1:20808 google.com
+
+<HTML><HEAD><meta http-equiv="content-type" content="text/html;charset=utf-8">
+<TITLE>301 Moved</TITLE></HEAD><BODY>
+<H1>301 Moved</H1>
+The document has moved
+<A HREF="http://www.google.com/">here</A>.
+</BODY></HTML>
+```
+
 
 ## 透明代理
 
