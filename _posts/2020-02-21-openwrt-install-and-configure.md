@@ -60,12 +60,13 @@ opkg install luci-i18n-base-zh-cn
 
 #### 系统管理
 
-- 将个人电脑网口与软路由lan口连接，电脑浏览器打开http://openwrt.lan ，无需密码直接登录。[LuCI](http://openwrt.lan) → 系统 → 管理权，修改软路由登录密码
-- 可使用ssh登录OpenWrt
+- [LuCI](http://openwrt.lan)是OpenWrt的WEB端管理系统
+  - 将个人电脑网口与软路由lan口连接，电脑浏览器打开http://openwrt.lan ，初次使用无需密码直接登录。[LuCI](http://openwrt.lan) → 系统 → 管理权，修改软路由登录密码
+- 也可使用ssh登录OpenWrt进行管理配置
   - 地址：openwrt.lan (或者使用lan的IP地址)
   - 端口：22
   - 用户名：root
-  - 密码：与[LuCI](http://openwrt.lan)登录密码一致，未修改设置密码时初次登录无密码
+  - 密码：与[LuCI](http://openwrt.lan)登录密码一致，未修改设置密码时初次使用无需密码
 
 #### 多LAN口配置
 
