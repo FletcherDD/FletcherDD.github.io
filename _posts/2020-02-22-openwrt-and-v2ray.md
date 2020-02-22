@@ -82,7 +82,7 @@ V2Ray v4.22.1 is installed.
 ```
 $ vim /etc/v2ray/config.json
 ```
-这是一个WebSocket+TLS+Web的VMess协议代理配置，本地设置了一个sock入口代理和一个http入口代理。默认直连，非国内域名则走代理，bt流量直连
+下面是一个WebSocket+TLS+Web的VMess协议的客户端配置，设置了一个sock入口代理和一个http入口代理。默认直连，非国内域名则走代理，bt流量直连
 ```
 {
 	"inbounds": [
@@ -237,10 +237,18 @@ The document has moved
 ```
 - 客户端测试
 
-  浏览器配置sock或者http代理，服务器为路由器域名或者IP地址
+  客户端连接OpenWrt路由器，浏览器配置sock或者http代理，代理服务器为路由器域名或IP地址
 
 
 ## 透明代理
+
+客户端仍然需要设置OpenWrt为代理服务器才能走V2Ray，使用透明代理可以实现客户端无需任何配置即可通过V2Ray代理上网
+
+### V2Ray配置
+
+### OpenWrt配置
+
+
 
 - 参考文档
   - [白话文教程](https://toutyrater.github.io)
