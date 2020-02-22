@@ -36,30 +36,50 @@ physdiskwrite.exe -u xxxxxx.img
 
 ### 网络配置与安装语言包
 
-- 使用官方安装包安装的OpenWrt默认配置：
+- 官方安装包的OpenWrt默认配置：
   - 域名：openwrt.lan
   - IP：192.168.1.1
   - 用户：root
   - 密码：（无）
-- 使用以下命令查看wan和lan的配置网口
+- 以下命令查看wan和lan网口配置
 ```
 cat /etc/config/network
 ```
-- 若上层路由IP已经是192.168.1.1则需要修改IP
+- 若上层路由器IP已经是192.168.1.1则需要修改lan的IP
 ```
 vim /etc/config/network
 ```
-- 将软路由wan口与可上网的路由器lan口连接，确认软路由已联网
+- 将软路由wan口与另一台可上网的路由器lan口连接，确认软路由已联上外网
 - 系统web界面为英文，可安装中文语言包：
 ```
 opkg update
 opkg install luci-i18n-base-zh-cn
 ```
 
+### 网络配置
+
+#### 系统管理
+
+- 将个人电脑网口与软路由lan口连接，电脑浏览器打开http://openwrt.lan ，无需密码直接登录。[LuCI](http://openwrt.lan) → 系统 → 管理权，修改软路由登录密码
+- 可使用ssh登录OpenWrt
+  - 地址：openwrt.lan (或者使用lan的IP地址)
+  - 端口：22
+  - 用户名：root
+  - 密码：与[LuCI](http://openwrt.lan)登录密码一致，未修改设置密码时初次登录无密码
+
+#### 多LAN口配置
+
+- [LuCI](http://openwrt.lan) → 网络 → 接口，点击编辑LAN → 物理设置 → 接口，勾选其他需要设置为LAN口的网络接口 → 保存 → 保存并应用
+
+#### 拨号上网
+
+- 默认设置桥接上级路由，如果需要用此软路由来拨号上网则需要修改设置
+- [LuCI](http://openwrt.lan) → 网络 → 接口，点击编辑WAN → 基本设置 → 协议PPPOE → 切换协议 → 输入用户名密码 → 保存 → 保存并应用
+
+
 ### 系统空间扩容
 
 - 系统初始空间仅256M，如果安装的硬盘空间足够大，则仍有大量空闲空间未使用，而一般分区工具可能无法对此系统空间扩容，官方使用OverlayFS来实现扩展软件安装空间，使用时最好了解OverlayFS的特性再决定是否使用此方式来扩容
-- [官方文档](https://openwrt.org/docs/guide-user/additional-software/extroot_configuration)
 - 安装必要的软件：
 ```
 opkg update
@@ -98,19 +118,11 @@ reboot
 
 ![扩容后](/assets/img/mount_after.png)
 
-### 网络配置
-
-#### 管理密码
-
-- 将个人电脑网口与软路由lan口连接，电脑浏览器打开http://openwrt.lan ，无需密码直接登录。[LuCI](http://openwrt.lan) → 系统 → 管理权，修改软路由登录密码
-
-#### 多LAN口配置
-
-- [LuCI](http://openwrt.lan) → 网络 → 接口，点击编辑LAN → 物理设置 → 接口，勾选其他需要设置为LAN口的网络接口 → 保存 → 保存并应用
-
-#### 拨号上网
-
-- 默认设置桥接上级路由，如果需要用此软路由来拨号上网则需要修改设置
-- [LuCI](http://openwrt.lan) → 网络 → 接口，点击编辑WAN → 基本设置 → 协议PPPOE → 切换协议 → 输入用户名密码 → 保存 → 保存并应用
-
-
+- 参考文档
+  - [Extroot configuration](https://openwrt.org/docs/guide-user/additional-software/extroot_configuration)
+  - [The OpenWrt Flash Layout](https://openwrt.org/docs/techref/flash.layout)
+  - [Openwrt文件系统及flash分区介绍](https://www.openwrtdl.com/wordpress/%E6%96%B0%E6%89%8Bopenwrt%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%8F%8Aflash%E5%88%86%E5%8C%BA%E4%BB%8B%E7%BB%8D)
+  - [Openwrt flash分区、文件系统](https://www.openwrtdl.com/wordpress/%E6%96%B0%E6%89%8Bopenwrt%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%8F%8Aflash%E5%88%86%E5%8C%BA%E4%BB%8B%E7%BB%8D)
+  
+  
+  
