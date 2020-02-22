@@ -215,6 +215,7 @@ exit 0
 ### 代理测试
 
 - OpenWrt路由器端测试
+
 ```
 $ curl -x socks5://127.0.0.1:10808 google.com
 
@@ -225,6 +226,7 @@ The document has moved
 <A HREF="http://www.google.com/">here</A>.
 </BODY></HTML>
 ```
+
 ```
 $ curl -x http://your-http-proxy-username:your-http-proxy-password@127.0.0.1:20808 google.com
 
@@ -235,6 +237,7 @@ The document has moved
 <A HREF="http://www.google.com/">here</A>.
 </BODY></HTML>
 ```
+
 - 客户端测试
 
   客户端连接OpenWrt路由器，浏览器配置sock或者http代理，代理服务器为路由器域名或IP地址
