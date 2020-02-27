@@ -299,15 +299,6 @@ The document has moved
 ```
 "dns": {
 	"servers": [
-		{
-			"address": "223.5.5.5", 
-			"port": 53,
-			"domains": [
-				"geosite:cn",
-				"ntp.org",   
-				"your-v2ray-server-domain" 
-			]
-		},
 		"114.114.114.114",
 		{
 			"address": "8.8.8.8", 
@@ -318,7 +309,6 @@ The document has moved
 				"your-v2ray-server-domain" 
 			]
 		},
-		"1.1.1.1", 
 		"localhost"
 	]
 }
@@ -342,7 +332,6 @@ The document has moved
 		{
 			"type": "field", 
 			"ip": [ 
-				"223.5.5.5",
 				"114.114.114.114"
 			],
 			"outboundTag": "direct"
@@ -350,8 +339,7 @@ The document has moved
 		{
 			"type": "field",
 			"ip": [ 
-				"8.8.8.8",
-				"1.1.1.1"
+				"8.8.8.8"
 			],
 			"outboundTag": "proxy"
 		}
@@ -391,7 +379,7 @@ iptables -t mangle -A PREROUTING -j V2RAY
 
 ### 一些问题
 
-- 只能代理连接到路由器的终端，而本机无法实现透明代理（所以设置了http和socks入口）
+- 只能代理连接到路由器的终端，而本机无法实现全局代理（所以我额外设置了http和socks入口）
 
 - 路由器重启后需要再手动重启下防火墙，否则终端连接不到外网，原因未知
 
@@ -402,7 +390,7 @@ iptables -t mangle -A PREROUTING -j V2RAY
 [Warning] v2ray.com/core/transport/internet/tcp: failed to accepted raw connections > accept tcp [::]:12345: accept4: too many open files
 ```
 
-扩大文件句柄限制，之后需要重启V2Ray，cannot find the pending request的错误仍然无法解决
+扩大文件句柄限制，之后需要重启V2Ray，cannot find the pending request的错误似乎依然存在
 
 ```
 ulimit -n 65535
