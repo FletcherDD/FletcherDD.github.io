@@ -386,7 +386,7 @@ iptables -t mangle -A PREROUTING -j V2RAY
 - error日志中大量出现以下警告和错误
 
 ```
-[Error] v2ray.com/core/app/dns: UDP:223.5.5.5:53 cannot find the pending request
+[Error] v2ray.com/core/app/dns: UDP:114.114.114.114:53 cannot find the pending request
 [Warning] v2ray.com/core/transport/internet/tcp: failed to accepted raw connections > accept tcp [::]:12345: accept4: too many open files
 ```
 
