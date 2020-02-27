@@ -396,6 +396,7 @@ iptables -t mangle -A PREROUTING -j V2RAY
 ulimit -n 65535
 ```
 
+- 无法代理 [www.google.com](https://www.google.com) 找不到DNS服务器。。。
 
 
 - 参考文档
