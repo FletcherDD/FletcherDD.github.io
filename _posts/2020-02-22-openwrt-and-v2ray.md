@@ -395,10 +395,19 @@ iptables -t mangle -A PREROUTING -j V2RAY
 
 - 路由器重启后需要再手动重启下防火墙，否则终端连接不到外网，原因未知
 
-- error日志中出现too many open files，扩大文件句柄限制，之后需要重启V2Ray
+- error日志中大量出现以下警告和错误
+
+```
+[Error] v2ray.com/core/app/dns: UDP:223.5.5.5:53 cannot find the pending request
+[Warning] v2ray.com/core/transport/internet/tcp: failed to accepted raw connections > accept tcp [::]:12345: accept4: too many open files
+```
+
+扩大文件句柄限制，之后需要重启V2Ray，cannot find the pending request的错误仍然无法解决
+
 ```
 ulimit -n 65535
 ```
+
 
 
 - 参考文档
