@@ -247,10 +247,158 @@ The document has moved
 
 客户端仍然需要设置OpenWrt为代理服务器才能走V2Ray，使用透明代理可以实现客户端无需任何配置即可通过V2Ray代理上网
 
+以下通过iptables(OpenWrt) + dns(V2Ray)使用TPROXY方式来实现透明代理
+
 ### V2Ray配置
+
+- inbounds添加任意门，标记transparent，开放端口12345（举个栗子）
+
+```
+{
+	"tag":"transparent",
+	"port": 12345,
+	"protocol": "dokodemo-door",
+	"settings": {
+		"network": "tcp,udp",
+		"followRedirect": true
+	},
+	"sniffing": {
+		"enabled": true,
+		"destOverride": [
+			"http",
+			"tls"
+		]
+	},
+	"streamSettings": {
+		"sockopt": {
+			"tproxy": "tproxy"
+		}
+	}
+}
+```
+
+- outbounds直连自由门设置domainStrategy为UseIP
+
+```
+{
+	"tag": "direct",
+	"protocol": "freedom",
+	"settings": {
+		"domainStrategy": "UseIP"
+	},
+	"streamSettings": {
+		"sockopt": {
+			"mark": 255
+		}
+	}
+}
+```
+
+- 配置V2Ray内置DNS
+
+```
+"dns": {
+	"servers": [
+		{
+			"address": "223.5.5.5", 
+			"port": 53,
+			"domains": [
+				"geosite:cn",
+				"ntp.org",   
+				"your-v2ray-server-domain" 
+			]
+		},
+		"114.114.114.114",
+		{
+			"address": "8.8.8.8", 
+			"port": 53,
+			"domains": [
+				"geosite:geolocation-!cn",
+				"ntp.org",   
+				"your-v2ray-server-domain" 
+			]
+		},
+		"1.1.1.1", 
+		"localhost"
+	]
+}
+```
+
+- 路由设置domainStrategy为IPIfNonMatch/IPOnDemand，并配置DNS路由规则
+
+```
+"routing": {
+	"domainStrategy": "IPOnDemand",
+	"rules": [
+		{
+			"type": "field",
+			"inboundTag": [
+				"transparent"
+			],
+			"port": 123,
+			"network": "udp",
+			"outboundTag": "direct" 
+		},    
+		{
+			"type": "field", 
+			"ip": [ 
+				"223.5.5.5",
+				"114.114.114.114"
+			],
+			"outboundTag": "direct"
+		},
+		{
+			"type": "field",
+			"ip": [ 
+				"8.8.8.8",
+				"1.1.1.1"
+			],
+			"outboundTag": "proxy"
+		}
+	]
+}
+```
 
 ### OpenWrt配置
 
+- 可能需要安装一些必要的模块（未验证）
+
+```
+opkg update
+opkg install iptables-mod-tproxy
+```
+
+- 设置防火墙规则，编辑文件/etc/firewall.user，假设路由器本机IP段为192.168.0.0/16
+
+```
+ip rule add fwmark 1 table 100
+ip route add local default dev lo table 100
+
+iptables -t mangle -N V2RAY
+iptables -t mangle -A V2RAY -d 0.0.0.0/8 -j RETURN
+iptables -t mangle -A V2RAY -d 10.0.0.0/8 -j RETURN
+iptables -t mangle -A V2RAY -d 127.0.0.0/8 -j RETURN
+iptables -t mangle -A V2RAY -d 169.254.0.0/16 -j RETURN
+iptables -t mangle -A V2RAY -d 172.16.0.0/12 -j RETURN
+iptables -t mangle -A V2RAY -d 224.0.0.0/4 -j RETURN
+iptables -t mangle -A V2RAY -d 240.0.0.0/4 -j RETURN
+iptables -t mangle -A V2RAY -d 192.168.0.0/16 -p tcp -j RETURN
+iptables -t mangle -A V2RAY -d 192.168.0.0/16 -p udp ! --dport 53 -j RETURN
+iptables -t mangle -A V2RAY -p udp -j TPROXY --on-port 12345 --tproxy-mark 1
+iptables -t mangle -A V2RAY -p tcp -j TPROXY --on-port 12345 --tproxy-mark 1
+iptables -t mangle -A PREROUTING -j V2RAY
+```
+
+### 一些问题
+
+- 只能代理连接到路由器的终端，而本机无法实现透明代理（所以设置了http和socks入口）
+
+- 路由器重启后需要再手动重启下防火墙，否则终端连接不到外网，原因未知
+
+- error日志中出现too many open files，扩大文件句柄限制，之后需要重启V2Ray
+```
+ulimit -n 65535
+```
 
 
 - 参考文档
